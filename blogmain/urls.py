@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from .views import redir_blog
 
 urlpatterns = [
+    path('',redir_blog),
     path('admin/', admin.site.urls),
-    path('logsys/',include('logsys.urls'))
+    path('logsys/',include('logsys.urls')),
+    path('blog/',include('blog.urls'))
 ]
