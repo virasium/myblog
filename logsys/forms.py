@@ -21,6 +21,7 @@ class LoginForm(forms.Form):
         return super(LoginForm,self).clean(*args,**kwargs)
 
 class RegistrationForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter your username'}))
     email = forms.CharField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Enter your email'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Enter your password'}))
 
@@ -29,9 +30,6 @@ class RegistrationForm(forms.ModelForm):
         fields = [
             'username','email','password'
         ]
-        widgets = {
-            'username':forms.TextInput(attrs = {'class':'form-control','placeholder':'Enter your username'}),
-        }
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

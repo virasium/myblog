@@ -1,1 +1,7 @@
-
+.far {
+  margin-right: 5px;
+}
+a:hover {
+  text-decoration: none;
+  color:yellow !important;
+}

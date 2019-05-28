@@ -1,11 +1,12 @@
 {% extends 'blog/base_blog.html' %}
 {% block title %}
-  Posts:
+  Tag Detail
 {% endblock %}
+
 {% block content %}
+  <h1 class="text-center">Articles with "{{tag.title}}" tag</h1>
   <div class="card-group justify-content-center">
-  <h1 >Articles</h1>
-    {% for post in posts %}
+    {% for post in tag.post_set.all %}
       <div class="text-white bg-dark m-3 col-3 d-flex flex-column">
         <div class="card-header">
           <div class="d-flex justify-content-between">
@@ -15,16 +16,13 @@
         </div>
         <div class="card-body">
           <h5 class="card-title"><a href="{{post.get_absolute_url}}">{{post.title}}</a></h5>
-          <p class="card-text">{{post.body|truncatechars:30}}</p>
+          <p class="card-text">{{post.body|truncatechars:100}}</p>
         </div>
-        <div class="card-footer text-muted d-flex justify-content-between">
-            <div>
-              Tags:
-              {% for tag in post.tags.all %}
-                <a href="{{tag.get_absolute_url}}">#{{tag}}</a>
-              {% endfor %}
-            </div>
-            <a href="{{post.get_absolute_url}}#comm" class="comm"><i class="far fa-comment"></i>{{post.comment_set.all.count}}</a>
+        <div class="card-footer text-muted">
+            Tags:
+            {% for tag in post.tags.all %}
+              <a href="{{tag.get_absolute_url}}">#{{tag}}</a>
+            {% endfor %}
         </div>
       </div>
     {% endfor %}
