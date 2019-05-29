@@ -1,0 +1,17 @@
+{% extends 'blog/base_blog.html' %}
+{% block title %}
+  Post Update:
+{% endblock %}
+
+{% block content %}
+
+  <div class="container col-4">
+    <h1>Create your article</h1>
+    <form action="{{post.get_update_url}}" method="post">
+      {% csrf_token %}
+      {{formP.as_p}}
+      <button type="submit" name="button" class="btn btn-dark">Add article</button>
+    </form>
+  </div>
+
+{% endblock %}

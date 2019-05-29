@@ -5,3 +5,16 @@ a:hover {
   text-decoration: none;
   color:yellow !important;
 }
+
+.fas {
+  font-size: 60px;
+  opacity: 0.3;
+  position: fixed;
+  top: 200px;
+  left: 30px;
+}
+
+.fas:hover {
+  color:blue;
+  opacity: 0.6;
+}

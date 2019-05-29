@@ -1,0 +1,71 @@
+{% extends 'blog/base_blog.html' %}
+{% block title %}
+  Post:
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Post "{{post.title}}"</h1>
+
+<div class="card text-white bg-dark mb-3 container" >
+  <div class="card-header d-flex justify-content-between">
+    <span>{{post.author}}</span>
+    {% if request.user.is_authenticated and request.user == post.author%}
+    <div>
+      <a href="{{post.get_update_url}}"><i class="far fa-edit"></i></a>
+      <a href="{{post.get_delete_url}}"><i class="far fa-trash-alt"></i></a>
+    </div>
+    {% endif %}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{post.title}}</h5>
+    <p class="card-text">{{post.body}}</p>
+  </div>
+  {% if request.user.is_authenticated%}
+  <form action="{{post.get_absolute_url}}" method="post" id = "comm">
+    {% csrf_token %}
+    {{form.text}}
+    <button type="submit" name="button" class="btn btn-outline-light mb-3">Add comment</button>
+  </form>
+  {% else %}
+    <div class="card-title">
+      <span>If you want to add a comment please
+        <a href="{% url 'login_view_url' %}?next={{request.path}}#comm">log in</a> or
+        <a href="{% url 'register_view_url' %}?next={{request.path}}#comm">sign up</a></span>
+    </div>
+  {% endif %}
+
+
+  {% for comm in post.comment_set.all %}
+  <div class="card text-white bg-dark">
+    <div class="card-header">
+      <h5 class="mt-0 d-flex justify-content-between">
+        <span>{{comm.author}}</span>
+        <span>{{comm.pub_date}}</span>
+      </h5>
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{comm.text}}</p>
+      {% if request.user.is_authenticated and request.user == comm.author%}
+      <h5 class="card-title">
+        <div>
+          <a href="{{comm.get_delete_url}}"><i class="far fa-trash-alt"></i></a>
+        </div>
+      </h5>
+      {% endif %}
+    </div>
+  </div>
+    <div class="">
+      <div class="">
+
+
+      <div class="d-flex justify-content-between">
+        <span></span>
+
+      </div>
+      <hr style="border: 1px solid white;" />
+      </div>
+    </div>
+  {% endfor %}
+
+</div>
+{% endblock %}

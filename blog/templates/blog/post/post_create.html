@@ -1,0 +1,18 @@
+{% extends 'blog/base_blog.html' %}
+{% block title %}
+  Post Create:
+{% endblock %}
+
+{% block content %}
+
+  <div class="container col-4">
+    <h1>Create your article</h1>
+    <form action="{% url 'post_create_url' %}" method="post">
+      {% csrf_token %}
+      {{formP.as_p}}
+      <a href="{% url 'tag_create_url' %}" class="btn btn-outline-dark">Do you want to create a new tag?</a>
+      <button type="submit" name="button" class="btn btn-dark">Add article</button>
+    </form>
+  </div>
+
+{% endblock %}

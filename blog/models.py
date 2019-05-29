@@ -18,7 +18,7 @@ class Post(models.Model):
     title = models.CharField(max_length = 150)
     slug = models.SlugField(max_length=150,unique = True,blank=True)
     body = models.TextField(blank = True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE,blank = True,null=True)
     tags = models.ManyToManyField('Tag',blank = True)
 
     pub_date = models.DateTimeField(auto_now_add = True)
@@ -29,6 +29,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post_detail_url',kwargs = {'slug':self.slug})
 
+    def get_update_url(self):
+        return reverse('post_update_url',kwargs = {'slug':self.slug})
+
+    def get_delete_url(self):
+        return reverse('post_delete_url',kwargs = {'slug':self.slug})
+
     def save(self,*args,**kwargs):
         if not self.id:
             self.slug = gen_slug(Post,self.title)
@@ -36,7 +42,7 @@ class Post(models.Model):
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=150)
+    title = models.CharField(max_length=150,unique = True,blank=True)
     slug = models.SlugField(max_length = 150,unique = True,blank=True)
 
     def __str__(self):
@@ -47,8 +53,9 @@ class Tag(models.Model):
 
     def save(self,*args,**kwargs):
         if not self.id:
-            self.slug = gen_slug(Post,self.title)
+            self.slug = gen_slug(Tag,self.title)
         super().save(*args,**kwargs)
+
 
 class Comment(models.Model):
     text = models.CharField(max_length = 150)
@@ -59,3 +66,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+    def get_delete_url(self):
+        return reverse('comment_delete_url',kwargs = {'id':self.id})
