@@ -10,5 +10,5 @@ urlpatterns = [
     path('tags/',TagsList.as_view(),name = 'tags_list_url'),
     path('tag/create/',TagCreate.as_view(),name = 'tag_create_url'),
     path('tag/<slug>/',TagDetail.as_view(),name = 'tag_detail_url'),
-    path('/<id>/',comm_delete,name = 'comment_delete_url')
+    path('<id>/',comm_delete,name = 'comment_delete_url')
 ]

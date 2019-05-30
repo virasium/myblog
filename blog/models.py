@@ -23,6 +23,9 @@ class Post(models.Model):
 
     pub_date = models.DateTimeField(auto_now_add = True)
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def __str__(self):
         return '{},{}'.format(self.title,self.author)
 
@@ -45,6 +48,9 @@ class Tag(models.Model):
     title = models.CharField(max_length=150,unique = True,blank=True)
     slug = models.SlugField(max_length = 150,unique = True,blank=True)
 
+    class Meta:
+        ordering = ['title']
+
     def __str__(self):
         return self.title
 
@@ -63,6 +69,9 @@ class Comment(models.Model):
     post= models.ForeignKey('Post',on_delete = models.CASCADE, blank = True,null=True)
 
     pub_date = models.TimeField(auto_now_add = True)
+
+    class Meta:
+        ordering = ['-pub_date']
 
     def __str__(self):
         return self.text

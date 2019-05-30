@@ -3,6 +3,8 @@ from django.views.generic import View
 from django.urls import reverse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 from .models import *
 from .forms import *
@@ -10,8 +12,17 @@ from .forms import *
 # Create your views here.
 class PostsList(View):
     def get(self,request):
-        posts = Post.objects.all()
-        return render(request,'blog/post/posts_list.html',{'posts':posts})
+        qs = request.GET.get('search','')
+        if qs:
+            posts = Post.objects.filter(Q(title__icontains = qs)|Q(body__icontains = qs))
+        else:
+            posts = Post.objects.all()
+        paginator = Paginator(posts,5)
+        page_number = request.GET.get('page',1)
+        page = paginator.get_page(page_number)
+        next_url = '?page={}'.format(page.next_page_number()) if page.has_next() else ''
+        prev_url = '?page={}'.format(page.previous_page_number()) if page.has_previous() else ''
+        return render(request,'blog/post/posts_list.html',{'posts':page,'next_url':next_url,'prev_url':prev_url})
 
 class PostDetail(View):
     def get(self,request,slug):
@@ -70,7 +81,11 @@ class PostDelete(LoginRequiredMixin,View):
 
 class TagsList(View):
     def get(self,request):
-        tags = Tag.objects.all()
+        qs = request.GET.get('search','')
+        if qs:
+            tags = Tag.objects.filter(title__icontains = qs)
+        else:
+            tags = Tag.objects.all()
         return render(request,'blog/tag/tags_list.html',{'tags':tags})
 
 class TagDetail(View):

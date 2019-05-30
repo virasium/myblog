@@ -32,7 +32,7 @@
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name = "search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
       {% if request.user.is_authenticated %}
@@ -51,6 +51,31 @@
     {% block content %}
       There is no any content
     {% endblock %}
+
+
+      {% if posts.has_other_pages%}
+      <nav aria-label="..." class="d-flex justify-content-center">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="btn btn-dark m-1 text-white {% if not prev_url %} disabled {% endif %}" href="{{prev_url}}" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+
+          {% for n in posts.paginator.page_range %}
+            {% if n == posts.number%}
+            <li class="page-item active" aria-current="page">
+              <a class="btn btn-primary text-white m-1" href="?page={{n}}">{{n}}<span class="sr-only">(current)</span></a>
+            </li>
+            {% elif n > posts.number|add:-3 and n < posts.number|add:3 %}
+            <li class="page-item"><a class="btn btn-outline-dark m-1" href="?page={{n}}">{{n}}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          <li class="page-item">
+            <a class="btn btn-dark m-1 text-white {% if not next_url %} disabled {% endif %}" href="{{next_url}}">Next</a>
+          </li>
+        </ul>
+      </nav>
+    {% endif %}
   </div>
   {% if request.user.is_authenticated and request.user.is_staff %}
     <a href="/admin">Admin</a>

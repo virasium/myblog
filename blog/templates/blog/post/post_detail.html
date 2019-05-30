@@ -47,9 +47,7 @@
       <p class="card-text">{{comm.text}}</p>
       {% if request.user.is_authenticated and request.user == comm.author%}
       <h5 class="card-title">
-        <div>
-          <a href="{{comm.get_delete_url}}"><i class="far fa-trash-alt"></i></a>
-        </div>
+        <a href="{{comm.get_delete_url}}"><i class="far fa-trash-alt"></i></a>
       </h5>
       {% endif %}
     </div>
