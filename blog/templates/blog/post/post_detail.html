@@ -27,43 +27,52 @@
     <button type="submit" name="button" class="btn btn-outline-light mb-3">Add comment</button>
   </form>
   {% else %}
-    <div class="card-title">
-      <span>If you want to add a comment please
-        <a href="{% url 'login_view_url' %}?next={{request.path}}#comm">log in</a> or
-        <a href="{% url 'register_view_url' %}?next={{request.path}}#comm">sign up</a></span>
+  <div class="card-title">
+    <span>If you want to add a comment please
+      <a href="{% url 'login_view_url' %}?next={{request.path}}#comm">log in</a> or
+      <a href="{% url 'register_view_url' %}?next={{request.path}}#comm">sign up</a></span>
     </div>
-  {% endif %}
+    {% endif %}
 
 
-  {% for comm in post.comment_set.all %}
-  <div class="card text-white bg-dark">
-    <div class="card-header">
-      <h5 class="mt-0 d-flex justify-content-between">
-        <span>{{comm.author}}</span>
-        <span>{{comm.pub_date}}</span>
-      </h5>
-    </div>
-    <div class="card-body">
-      <p class="card-text">{{comm.text}}</p>
-      {% if request.user.is_authenticated and request.user == comm.author%}
-      <h5 class="card-title">
-        <a href="{{comm.get_delete_url}}"><i class="far fa-trash-alt"></i></a>
-      </h5>
-      {% endif %}
-    </div>
-  </div>
-    <div class="">
-      <div class="">
+    {% for comm in post.comment_set.all %}
+    <div class="card text-white bg-dark">
+      <div class="card-header">
+        <h5 class="mt-0 d-flex justify-content-between">
 
-
-      <div class="d-flex justify-content-between">
-        <span></span>
-
+          <div>
+            <span>{{comm.author}}</span>
+            <span>{{comm.pub_date}}</span>
+            {% if comm.reply_to %}
+            <span>Reply to {{comm.reply_to|truncatechars:10}},{{comm.reply_to.author}}</span>
+            {% endif %}
+          </div>
+          {% if request.user.is_authenticated and request.user == comm.author%}
+          <a href="{{comm.get_delete_url}}"><i class="far fa-trash-alt"></i></a>
+          {% endif %}
+        </h5>
       </div>
-      <hr style="border: 1px solid white;" />
+      <div class="card-body">
+        <p class="card-text">{{comm.text}}</p>
+        {% if request.user.is_authenticated%}
+          <h5 class="card-title">
+            <form method="post">
+              {% csrf_token %}
+              {{form.text}}
+              <input type="hidden" value="{{comm.id}}" name="parent_id">
+              <button type="submit" name="button" class="btn btn-outline-light mb-3">Reply</button>
+            </form>
+          </h5>
+        {% endif %}
+      </div>
+    <div>
+      <div>
+        <div class="d-flex justify-content-between">
+          <span></span>
+        </div>
+        <hr style="border: 1px solid white;" />
       </div>
     </div>
-  {% endfor %}
-
-</div>
-{% endblock %}
+    {% endfor %}
+    </div>
+  {% endblock %}

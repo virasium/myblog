@@ -34,7 +34,13 @@ class PostDetail(View):
         post = Post.objects.get(slug = slug)
         form = CommentForm(request.POST)
         if form.is_valid():
-            new_form = form.save(commit = False)
+            parent_id = request.POST.get('parent_id','')
+            if parent_id:
+                comm_parent = Comment.objects.get(id = int(parent_id))
+                new_form = form.save(commit = False)
+                new_form.reply_to = comm_parent
+            else:
+                new_form = form.save(commit = False)
             new_form.author = request.user
             new_form.post = post
             new_form.save()

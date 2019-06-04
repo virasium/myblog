@@ -6,7 +6,7 @@ a:hover {
   color:yellow !important;
 }
 
-.fas {
+.fas-plus {
   font-size: 60px;
   opacity: 0.3;
   position: fixed;
@@ -14,7 +14,7 @@ a:hover {
   left: 30px;
 }
 
-.fas:hover {
+.fas-plus:hover {
   color:blue;
   opacity: 0.6;
 }

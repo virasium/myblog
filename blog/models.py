@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from django.urls import reverse
 
 def gen_slug(clss,title):
-    orig_slug = slugify(title)
+    orig_slug = slugify(title,allow_unicode= True)
     uniq_slug = orig_slug
     n = 1
     while clss.objects.filter(slug=uniq_slug).exists():
@@ -67,6 +67,7 @@ class Comment(models.Model):
     text = models.CharField(max_length = 150)
     author = models.ForeignKey(User,on_delete = models.CASCADE,blank = True,null=True)
     post= models.ForeignKey('Post',on_delete = models.CASCADE, blank = True,null=True)
+    reply_to = models.ForeignKey('Comment',on_delete = models.CASCADE, blank = True,null=True)
 
     pub_date = models.TimeField(auto_now_add = True)
 
